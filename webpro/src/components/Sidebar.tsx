@@ -136,7 +136,14 @@ const Sidebar = ({ className }: SidebarProps) => {
           <Button 
             variant="ghost" 
             className="w-full justify-start text-[18px] py-6 transition-colors duration-200 hover:bg-red-500 hover:text-white"
-            onClick={() => handleNavigation('/')}
+            onClick={() => {
+              fetch("http://localhost:3000/auth/logout",{method:"POST",credentials:"include"}).then((v)=> {
+
+                handleNavigation('/')
+              }).catch((ex)=> {
+                console.error("GOT ERROR: ",ex)
+              })
+            }}
           >
             <LogOut className="mr-2 h-6 w-6 md:h-8 md:w-8" />
             Log Out

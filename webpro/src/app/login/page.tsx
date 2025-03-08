@@ -30,16 +30,17 @@ const Signin = () => {
           throw new Error('รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร');
         }
   
-        const response = await fetch('/api/login', {
+        const response = await fetch('http://localhost:3000/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'include',
           body: JSON.stringify(userData),
         });
   
         const data = await response.json();
-  
+        console.log("Response Data:", data);
         if (!response.ok) {
           throw new Error(data.message || 'เข้าสู่ระบบไม่สำเร็จ');
         }
@@ -48,8 +49,12 @@ const Signin = () => {
           duration: 3000,
           position: 'bottom-right',
         });
-  
-        router.push('/dashboard')
+        if (data.role == "admin") {
+          router.push('/admin/main');
+        }
+        else {
+          router.push('/user/main');
+        }
       } catch (error) {
         const errorMessage = error instanceof Error && Object.values(VALIDATION_MESSAGES).includes(error.message)
           ? error.message 
